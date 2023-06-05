@@ -1,0 +1,25 @@
+name: localgpt
+services:
+  appserver:
+
+    # Cuda Image based on ubuntu 22.04
+    build:
+      context: .
+      dockerfile: Dockerfile 
+    
+    # Prevents automatic exit
+    command: tail -f /dev/null
+
+    # Local source
+    volumes:
+      - $PWD:/datos/source
+      - /datos/source/DB
+
+    # Attach GPU
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
